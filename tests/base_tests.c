@@ -1,15 +1,15 @@
 #include <criterion/criterion.h>
 #include <string.h>
 
-#include "caesar.h" 
+#include "caesar.h"
 #include "strPtr.h"
-
 
 /*
  * Part 1: String utility functions
  */
 
-Test(strgLen, basic) {
+Test(strgLen, basic)
+{
     cr_assert_eq(strgLen("Stony Brook"), 11);
     cr_assert_eq(strgLen("CSE 220"), 7);
     cr_assert_eq(strgLen("C"), 1);
@@ -18,11 +18,13 @@ Test(strgLen, basic) {
     cr_assert_eq(strgLen(""), 0);
 }
 
-Test(strgLen, null_input) {
+Test(strgLen, null_input)
+{
     cr_assert_eq(strgLen(NULL), -1);
 }
 
-Test(strgCopy, normal_and_empty) {
+Test(strgCopy, normal_and_empty)
+{
     char dest[32] = {0};
     strgCopy(dest, "Computer Science");
     cr_assert_str_eq(dest, "Computer Science");
@@ -38,7 +40,8 @@ Test(strgCopy, normal_and_empty) {
 //     cr_assert_str_eq(d, "Comp");  // 4 chars + '\0'
 // }
 
-Test(strgCopy, null_args_do_nothing) {
+Test(strgCopy, null_args_do_nothing)
+{
     char dest[16] = "UNCHANGED";
     strgCopy(NULL, "foo");
     cr_assert_str_eq(dest, "UNCHANGED");
@@ -46,7 +49,8 @@ Test(strgCopy, null_args_do_nothing) {
     cr_assert_str_eq(dest, "UNCHANGED");
 }
 
-Test(strgChangeCase, flip_only_non_adjacent_to_digits) {
+Test(strgChangeCase, flip_only_non_adjacent_to_digits)
+{
     char s1[] = "Stony Brook";
     strgChangeCase(s1);
     cr_assert_str_eq(s1, "sTONY bROOK");
@@ -68,7 +72,8 @@ Test(strgChangeCase, flip_only_non_adjacent_to_digits) {
     cr_assert_str_eq(s5, "_x_");
 }
 
-Test(strgChangeCase, empty_and_digit_only) {
+Test(strgChangeCase, empty_and_digit_only)
+{
     char e1[] = "";
     strgChangeCase(e1);
     cr_assert_str_eq(e1, "");
@@ -78,37 +83,40 @@ Test(strgChangeCase, empty_and_digit_only) {
     cr_assert_str_eq(e2, "1");
 }
 
-Test(strgDiff, differences_and_equals) {
-    cr_assert_eq(strgDiff("Hello","Hello"), -1);
-    cr_assert_eq(strgDiff("CSE-220","CSE220"), 3);
-    cr_assert_eq(strgDiff("CSE220","SE220"), 0);
-    cr_assert_eq(strgDiff("",""), -1);
+Test(strgDiff, differences_and_equals)
+{
+    cr_assert_eq(strgDiff("Hello", "Hello"), -1);
+    cr_assert_eq(strgDiff("CSE-220", "CSE220"), 3);
+    cr_assert_eq(strgDiff("CSE220", "SE220"), 0);
+    cr_assert_eq(strgDiff("", ""), -1);
 }
 
-Test(strgDiff, null_inputs) {
+Test(strgDiff, null_inputs)
+{
     cr_assert_eq(strgDiff(NULL, "foo"), -2);
     cr_assert_eq(strgDiff("foo", NULL), -2);
 }
 
-Test(strgInterleave, normal_and_unequal_lengths) {
+Test(strgInterleave, normal_and_unequal_lengths)
+{
     char dest[32] = {0};
 
-    strgInterleave("abc","123", dest);
+    strgInterleave("abc", "123", dest);
     cr_assert_str_eq(dest, "a1b2c3");
 
-    strgInterleave("abcdef","123", dest);
+    strgInterleave("abcdef", "123", dest);
     cr_assert_str_eq(dest, "a1b2c3def");
 
-    strgInterleave("cse","12345", dest);
+    strgInterleave("cse", "12345", dest);
     cr_assert_str_eq(dest, "c1s2e345");
 
-    strgInterleave("1234","cs", dest);
+    strgInterleave("1234", "cs", dest);
     cr_assert_str_eq(dest, "1c2s34");
 
     strgInterleave("", "", dest);
     cr_assert_str_eq(dest, "");
 
-    strgInterleave("","123", dest);
+    strgInterleave("", "123", dest);
     cr_assert_str_eq(dest, "123");
 }
 
@@ -118,7 +126,8 @@ Test(strgInterleave, normal_and_unequal_lengths) {
 //     cr_assert_str_eq(tiny, "a1b2");  // truncated to 4 chars + '\0'
 // }
 
-Test(strgReverseLetters, basic) {
+Test(strgReverseLetters, basic)
+{
     char t1[] = "hello";
     strgReverseLetters(t1);
     cr_assert_str_eq(t1, "olleh");
@@ -150,27 +159,28 @@ Test(strgReverseLetters, basic) {
 
 /* encryptCaesar tests */
 
-
-Test(encryptCaesar, basic_shifts) {
+Test(encryptCaesar, basic_shifts)
+{
     char out[64];
 
-    cr_assert_eq(encryptCaesar("abc",  out, 2), 3);
+    cr_assert_eq(encryptCaesar("abc", out, 2), 3);
     cr_assert_str_eq(out, "ceg__EOM__");
 
-    cr_assert_eq(encryptCaesar("Ayb",  out, 3), 3);
+    cr_assert_eq(encryptCaesar("Ayb", out, 3), 3);
     cr_assert_str_eq(out, "Dcg__EOM__");
 
     cr_assert_eq(encryptCaesar("Cse220", out, 1), 6);
     cr_assert_str_eq(out, "Duh911__EOM__");
 
-    cr_assert_eq(encryptCaesar("CS",   out, 0), 2);
+    cr_assert_eq(encryptCaesar("CS", out, 0), 2);
     cr_assert_str_eq(out, "CT__EOM__");
 
     cr_assert_eq(encryptCaesar("System Fundamentals", out, 1), 18);
     cr_assert_str_eq(out, "Tavxjs Ndxomzscjrdl__EOM__");
 }
 
-Test(encryptCaesar, empty_input) {
+Test(encryptCaesar, empty_input)
+{
     char out[32] = {0};
     cr_assert_eq(encryptCaesar("", out, 42), 0);
     cr_assert_str_eq(out, "undefined__EOM__");
@@ -186,15 +196,17 @@ Test(encryptCaesar, empty_input) {
 //     cr_assert_eq(encryptCaesar("abc", b2, 2), -1);
 // }
 
-Test(encryptCaesar, null_args) {
+Test(encryptCaesar, null_args)
+{
     char out[16];
     cr_assert_eq(encryptCaesar(NULL, out, 5), -2);
-    cr_assert_eq(encryptCaesar("hi",  NULL, 5), -2);
+    cr_assert_eq(encryptCaesar("hi", NULL, 5), -2);
 }
 
 /* decrypt tests */
 
-Test(decryptCaesar, basic_unshifts) {
+Test(decryptCaesar, basic_unshifts)
+{
     char out[64];
 
     cr_assert_eq(decryptCaesar("ceg__EOM__", out, 2), 3);
@@ -213,20 +225,23 @@ Test(decryptCaesar, basic_unshifts) {
     cr_assert_str_eq(out, "System Fundamentals");
 }
 
-Test(decryptCaesar, empty_input_marker) {
+Test(decryptCaesar, empty_input_marker)
+{
     char out[32];
     cr_assert_eq(decryptCaesar("undefined__EOM__", out, 7), 0);
     cr_assert_str_eq(out, "undefined");
 }
 
-Test(decryptCaesar, zero_length_plaintext) {
+Test(decryptCaesar, zero_length_plaintext)
+{
     /* initial strlen(plaintext)==0 ⇒ return 0, no write */
     char p[1] = "";
     cr_assert_eq(decryptCaesar("ceg__EOM__", p, 2), 0);
     cr_assert_str_eq(p, "");
 }
 
-Test(decryptCaesar, missing_marker) {
+Test(decryptCaesar, missing_marker)
+{
     /* plaintext must remain unchanged */
     char buf[32];
     strcpy(buf, "no marker here");
@@ -234,7 +249,8 @@ Test(decryptCaesar, missing_marker) {
     cr_assert_str_eq(buf, "no marker here");
 }
 
-Test(decryptCaesar, null_args) {
+Test(decryptCaesar, null_args)
+{
     char out[16];
     cr_assert_eq(decryptCaesar(NULL, out, 5), -2);
     cr_assert_eq(decryptCaesar("abc__EOM__", NULL, 5), -2);
