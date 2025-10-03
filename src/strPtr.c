@@ -8,7 +8,7 @@
 int strgLen(const char *s) {
     int len = 0;
     if (s == NULL) {
-        return 0;
+        return -1;
     }
     while (s[len] != '\0') {
         len++;
@@ -35,20 +35,27 @@ void strgChangeCase(char *s) {
     if (s == NULL) {
         return;
     }
-    while (*s != '\0'){
-        if (*s >= 'a' && *s <= 'z') {
-            *s = *s - ('a' - 'A');  
+    for (int i = 0; s[i] != '\0'; i++) {
+        int left_is_digit  = (i > 0 && (s[i-1] >= '0' && s[i-1] <= '9'));
+        int right_is_digit = (s[i+1] != '\0' && (s[i+1] >= '0' && s[i+1] <= '9'));
+        if (left_is_digit || right_is_digit) {
+            continue;
         }
-        else if (*s >= 'A' && *s <= 'Z') {
-            *s = *s + ('a' - 'A');  
+        if (s[i] >= 'a' && s[i] <= 'z') {
+            s[i] = s[i] - ('a' - 'A');  
         }
-        s++;
+        else if (s[i] >= 'A' && s[i] <= 'Z') {
+            s[i] = s[i] + ('a' - 'A');  
+        }
     }
     (void)s;
 }
 
 int strgDiff(char *s1, char *s2) {
     int count = 0;
+    if (s1 == NULL || s2 == NULL){
+        return -2;
+    }
     while (s1 != NULL && s2 != NULL && *s1 != '\0' && *s2 != '\0'){
         if (*s1 != *s2) {
             return count;

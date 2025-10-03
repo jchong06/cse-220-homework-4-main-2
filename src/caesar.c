@@ -9,6 +9,10 @@
 
 int encryptCaesar(const char *plaintext, char *ciphertext, int key) {
 	if (plaintext == NULL || ciphertext == NULL) return -2;
+    if (strgLen(plaintext) == 0) {
+        strgCopy(ciphertext, "undefined__EOM__");
+        return 0;
+    }
     int len = strgLen(plaintext);
     int count = len;
     for (int i = 0; i < len; i++) {
@@ -27,6 +31,7 @@ int encryptCaesar(const char *plaintext, char *ciphertext, int key) {
             count--;
         }
     }
+    
     strgCopy(ciphertext + len, "__EOM__");
 
     (void)plaintext;
@@ -37,8 +42,16 @@ int encryptCaesar(const char *plaintext, char *ciphertext, int key) {
 
 int decryptCaesar(const char *ciphertext, char *plaintext, int key) {
 	if (ciphertext == NULL || plaintext == NULL) return -2;
+    if (strgLen(plaintext) == 0) return 0;
+    if (strgDiff((char *) ciphertext, "undefined__EOM__") == -1){
+        strgCopy(plaintext, "undefined");
+        return 0;
+    }
     int len = strgLen(ciphertext);
     if (len < 7) return -1; 
+    if (strgDiff((char *)ciphertext + strgLen((char *)ciphertext) - 7, "__EOM__") != -1) {
+        return -1; 
+    }
     int editLen = len - 7;
     int count = editLen;
     for (int i = 0; i < editLen; i++) {
@@ -57,7 +70,7 @@ int decryptCaesar(const char *ciphertext, char *plaintext, int key) {
             count--;
         }
     }
-
+    plaintext[editLen] = '\0';
     (void)ciphertext;
     (void)plaintext;
     (void)key;
